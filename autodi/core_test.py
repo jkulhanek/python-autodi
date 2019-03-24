@@ -61,6 +61,23 @@ class CoreTestCase(unittest.TestCase):
         obj = provider.create('autodi.core_test:DummySingleDependency')
         self.assertIsInstance(obj, DummySingleDependency)
 
+    def test_registerDecorator(self):
+        container = core.Container()
+        
+        class Interface:
+            def __init__(self):
+                pass
+
+        @container.register(Interface)
+        class Service(Interface):
+            def __init__(self):
+                self.test = 'testok'
+
+        provider = container.create_provider()
+        obj = provider.create('Interface')
+        self.assertIsInstance(obj, Service)
+
+
     def test_transient(self):
         container = core.Container()
         container.register(DummyNoDependency)

@@ -172,12 +172,20 @@ class Container:
         if isinstance(value, str):
             record = StringRegistrationRecord(value)
         elif isinstance(value, type):
-            record = StringRegistrationRecord(type_to_repr(value))
+            if hasattr(value.__module__, value.__name__):
+                record = StringRegistrationRecord(type_to_repr(value))
+            else:
+                record = LambdaRegistrationRecord(value)
         elif callable(value):
             record = LambdaRegistrationRecord(value)
 
         self._registry[registration_key] = record
         record.lifetime = lifetime
+
+        def register_finalizer(service):
+            self.register(typename, service, lifetime=lifetime)
+            return service
+        return register_finalizer
 
     def create_provider(self):
         return Provider(self._registry, self._global_container)
