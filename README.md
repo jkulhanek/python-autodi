@@ -1,4 +1,6 @@
 # Simple Dependency Injection for Python 3.6+
+[![PyPI version](https://badge.fury.io/py/autodi.svg)](https://badge.fury.io/py/autodi)
+
 Type-based DI container for Python.
 
 ## Introduction
